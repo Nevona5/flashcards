@@ -1,0 +1,86 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>כרטיסיות אוצר מילים</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            direction: rtl;
+            background-color: #f4f4f4;
+            padding: 20px;
+        }
+        .card {
+            background: white;
+            padding: 20px;
+            margin: 10px auto;
+            width: 300px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        button {
+            margin: 5px;
+        }
+        .status {
+            font-size: 0.9em;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+
+<h2>כרטיסיות לימוד</h2>
+<div id="card-container"></div>
+<script>
+let cards = [{'english': 'dividing', 'hebrew': 'חלוקה'}, {'english': 'lingering', 'hebrew': 'התמהמהות'}, {'english': 'marketing', 'hebrew': 'שיווק'}, {'english': 'signed', 'hebrew': 'חתום/חתימה'}, {'english': 'treaty', 'hebrew': 'אמנה/הסכם'}, {'english': 'nation', 'hebrew': 'אומה'}, {'english': 'each', 'hebrew': 'כל'}, {'english': 'intelligence', 'hebrew': 'מודיעין'}, {'english': 'imbalance', 'hebrew': 'איזון חוסר'}, {'english': 'grace', 'hebrew': 'חן'}, {'english': 'crookedness', 'hebrew': '/נוכלות עקמומיות'}, {'english': 'Wheel', 'hebrew': 'גלגל'}, {'english': 'series', 'hebrew': 'סדרה'}, {'english': 'tutored', 'hebrew': 'הודרכה'}, {'english': 'diagnosed', 'hebrew': 'אובחנה'}, {'english': 'represented', 'hebrew': 'מיוצג'}, {'english': 'neglected', 'hebrew': 'מוזנח'}, {'english': 'appealing', 'hebrew': 'מושך'}, {'english': 'apparatus', 'hebrew': 'מנגנון'}, {'english': 'adaptation', 'hebrew': 'הסתגלות'}, {'english': 'assignment', 'hebrew': 'משימה'}, {'english': 'announcement', 'hebrew': 'הכרזה/הודעה'}, {'english': 'ship', 'hebrew': 'אונייה'}, {'english': 'shipwright', 'hebrew': 'ספינה'}, {'english': 'carpenter', 'hebrew': 'נגר'}, {'english': 'bones', 'hebrew': 'עצמות'}, {'english': 'bricks', 'hebrew': 'לבנים'}, {'english': 'bells', 'hebrew': 'פעמונים'}, {'english': 'who', 'hebrew': 'אשר/ש'}];
+let current = 0;
+let statuses = Array(cards.length).fill("");
+
+function speak(word) {
+    let utterance = new SpeechSynthesisUtterance(word);
+    utterance.lang = 'en-US';
+    speechSynthesis.speak(utterance);
+}
+
+function showCard(index) {
+    let card = cards[index];
+    document.getElementById('card-container').innerHTML = `
+        <div class="card">
+            <h3>${card.english}</h3>
+            <p>${card.hebrew}</p>
+            <button onclick="speak('${card.english}')">🔊 שמע</button><br><br>
+            <button onclick="setStatus('יודע')">✅ יודע</button>
+            <button onclick="setStatus('לא יודע')">❌ לא יודע</button>
+            <button onclick="setStatus('יודע חלקית')">🤔 יודע חלקית</button>
+            <p class="status">סטטוס: ${statuses[index]}</p>
+            <br>
+            <button onclick="prev()">⬅️ קודם</button>
+            <button onclick="next()">➡️ הבא</button>
+        </div>
+    `;
+}
+
+function setStatus(status) {
+    statuses[current] = status;
+    showCard(current);
+}
+
+function next() {
+    if (current < cards.length - 1) {
+        current++;
+        showCard(current);
+    }
+}
+
+function prev() {
+    if (current > 0) {
+        current--;
+        showCard(current);
+    }
+}
+
+showCard(current);
+</script>
+</body>
+</html>
